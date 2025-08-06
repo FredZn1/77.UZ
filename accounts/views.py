@@ -20,19 +20,11 @@ from .models import User
 
 
 class RegisterView(generics.CreateAPIView):
-    """
-    Foydalanuvchi ro'yxatdan o'tadi
-    Endpoint: POST /accounts/register/
-    """
     serializer_class = RegisterSerializer
     permission_classes = [AllowAny]
 
 
 class SellerRegisterView(generics.CreateAPIView):
-    """
-    Sotuvchi sifatida ro'yxatdan o'tadi
-    Endpoint: POST /accounts/seller/registration/
-    """
     serializer_class = SellerRegisterSerializer
     permission_classes = [AllowAny]
 
