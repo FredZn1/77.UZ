@@ -1,4 +1,5 @@
 from rest_framework import generics
+from .pagination import CustomPagination
 from .models import Page, Region
 from .serializers import PageSerializer, RegionWithDistrictsSerializer
 
@@ -6,6 +7,7 @@ from .serializers import PageSerializer, RegionWithDistrictsSerializer
 class PageListView(generics.ListAPIView):
     queryset = Page.objects.all()
     serializer_class = PageSerializer
+    pagination_class = CustomPagination
 
 
 class PageDetailView(generics.RetrieveAPIView):
@@ -17,3 +19,4 @@ class PageDetailView(generics.RetrieveAPIView):
 class RegionWithDistrictsView(generics.ListAPIView):
     queryset = Region.objects.prefetch_related('districts').all()
     serializer_class = RegionWithDistrictsSerializer
+    pagination_class = CustomPagination

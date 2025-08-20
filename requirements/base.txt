@@ -1,0 +1,10 @@
+Django>=5.2,<6.0
+djangorestframework
+drf-spectacular
+django-filter
+python-dotenv
+psycopg2-binary
+Pillow
+django-modeltranslation
+django-cleanup
+django-cors-headers

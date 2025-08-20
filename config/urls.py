@@ -14,12 +14,36 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+import debug_toolbar
+from django.conf import settings
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import include, path
+from drf_spectacular.views import (
+    SpectacularAPIView,
+    SpectacularRedocView,
+    SpectacularSwaggerView,
+)
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/', include('accounts.urls')),
-    path('api/', include('common.urls')),
-    path('api/', include('store.urls')),
+    path("admin/", admin.site.urls),
+
+    # API schema and docs
+    path("api/schema/", SpectacularAPIView.as_view(), name="schema"),  # schema json
+    path(
+        "api/docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"
+    ),  # swagger UI
+    path(
+        "api/redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"
+    ),  # redoc UI
+
+    # API v1 endpoints
+    path("api/v1/accounts/", include(("apps.accounts.urls", "accounts"), namespace="accounts")),
+    path("api/v1/common/", include(("apps.common.urls", "common"), namespace="common")),
+    path("api/v1/store/", include(("apps.store.urls", "store"), namespace="store")),
 ]
+
+# Debug toolbar (development only)
+if settings.DEBUG:
+    urlpatterns += [
+        path("__debug__/", include(debug_toolbar.urls)),
+    ]
