@@ -1,12 +1,22 @@
 from django.urls import path
-from . import views
+from .views import (
+    RegisterView,
+    SellerRegisterView,
+    LoginView,
+    MeView,
+    EditProfileView,
+    TokenRefreshCustomView,
+    TokenVerifyCustomView,
+)
+
+app_name = "accounts"
 
 urlpatterns = [
-    path("accounts/register/", views.RegisterView.as_view(), name="register"),
-    path("accounts/seller/registration/", views.SellerRegisterView.as_view(), name="seller-register"),
-    path("accounts/login/", views.LoginView.as_view(), name="login"),
-    path("accounts/me/", views.MeView.as_view(), name="me"),
-    path("accounts/edit/", views.EditProfileView.as_view(), name="edit-profile"),
-    path("accounts/token/refresh/", views.TokenRefreshCustomView.as_view(), name="token-refresh"),
-    path("accounts/token/verify/", views.TokenVerifyCustomView.as_view(), name="token-verify"),
+    path("register/", RegisterView.as_view(), name="register"),
+    path("register/seller/", SellerRegisterView.as_view(), name="seller-register"),
+    path("login/", LoginView.as_view(), name="login"),
+    path("me/", MeView.as_view(), name="me"),
+    path("me/edit/", EditProfileView.as_view(), name="edit-profile"),
+    path("token/refresh/", TokenRefreshCustomView.as_view(), name="token-refresh"),
+    path("token/verify/", TokenVerifyCustomView.as_view(), name="token-verify"),
 ]

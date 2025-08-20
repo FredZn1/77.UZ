@@ -2,12 +2,11 @@ import os
 import sys
 from pathlib import Path
 from datetime import timedelta
-
 from django.utils.translation import gettext_lazy as _
 from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 sys.path.append(os.path.join(BASE_DIR, "apps"))
 
 # Load environment variables
@@ -134,9 +133,7 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
-    "EXCEPTION_HANDLER": [
-        "common.utils.custom_exception_handler.custom_exception_handler",
-    ],
+    "EXCEPTION_HANDLER": "apps.common.utils.custom_exception_handler.custom_exception_handler",
 }
 
 # JWT configs
