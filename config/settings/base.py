@@ -5,22 +5,17 @@ from datetime import timedelta
 from django.utils.translation import gettext_lazy as _
 from dotenv import load_dotenv
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
-sys.path.append(os.path.join(BASE_DIR, "apps"))
+sys.path.append(BASE_DIR / "apps")
 
-# Load environment variables
-load_dotenv(os.path.join(BASE_DIR, ".env"))
+# Load env variables
+load_dotenv(BASE_DIR / ".env")
 
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-dev-secret")
-
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", "True") == "True"
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(",") if os.environ.get("ALLOWED_HOSTS") else []
 
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(",")
-
-# Application definition
+# Apps
 BASE_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -64,7 +59,7 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, "templates")],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -83,7 +78,7 @@ WSGI_APPLICATION = "config.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": os.environ.get("DB_ENGINE", "django.db.backends.sqlite3"),
-        "NAME": os.environ.get("DB_NAME", BASE_DIR / "db.sqlite3"),
+        "NAME": os.environ.get("DB_NAME") or (BASE_DIR / "db.sqlite3"),
         "USER": os.environ.get("DB_USER", ""),
         "PASSWORD": os.environ.get("DB_PASSWORD", ""),
         "HOST": os.environ.get("DB_HOST", ""),
@@ -91,7 +86,6 @@ DATABASES = {
     }
 }
 
-# Custom User model
 AUTH_USER_MODEL = "accounts.User"
 
 # Password validation
@@ -102,7 +96,7 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
-# Internationalization
+# i18n
 LANGUAGE_CODE = "en"
 TIME_ZONE = "Asia/Tashkent"
 USE_I18N = True
@@ -113,37 +107,33 @@ LANGUAGES = (
     ("ru", _("Russian")),
     ("en", _("English")),
 )
-
-LOCALE_PATHS = [
-    os.path.join(BASE_DIR, "locale"),
-]
+LOCALE_PATHS = [BASE_DIR / "locale"]
 
 # Static & Media
 STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATIC_ROOT = BASE_DIR / "static"
 
 MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_ROOT = BASE_DIR / "media"
 
-# Default primary key field type
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# Django Rest Framework configurations
+# DRF configs
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
+    "DEFAULT_PAGINATION_CLASS": "apps.common.pagination.CustomPagination",
+    "PAGE_SIZE": 10,
     "EXCEPTION_HANDLER": "apps.common.utils.custom_exception_handler.custom_exception_handler",
 }
 
-# JWT configs
+# JWT
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
 
-# Debug Toolbar configs
-INTERNAL_IPS = [
-    "127.0.0.1",
-]
+# Debug Toolbar
+INTERNAL_IPS = ["127.0.0.1"]
